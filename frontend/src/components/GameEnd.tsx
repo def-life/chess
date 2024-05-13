@@ -1,45 +1,19 @@
 import { Chess } from "chess.js"
 import { GAME_OVER_REASONS } from "../utils/constants"
 import { useUserValue } from "../hooks/user"
+import { useChessValue } from "../hooks/chess"
 
 
 type GameEndProps = {
     reason: string,
     isWhitePlayer: boolean,
     onClick: () => void,
-    chess: Chess,
 }
 
 function GameEnd(props: GameEndProps,) {
-    const { reason, isWhitePlayer, onClick, chess } = props
+    const { reason, isWhitePlayer, onClick } = props
+    const chess = useChessValue()
     const user = useUserValue()
-
-
-    function getReason() {
-        if (chess.isDraw()) {
-            console.log("inside isdraw")
-            if (chess.isInsufficientMaterial()) {
-                return GAME_OVER_REASONS.insufficientMaterial
-            } else {
-                return GAME_OVER_REASONS.fiftyMoveRule
-            }
-        } else if (chess.isStalemate()) {
-            console.log("inside isstatelmeate")
-            return GAME_OVER_REASONS.stalemate
-        } else if (chess.isThreefoldRepetition()) {
-            console.log("inside three fold")
-            return GAME_OVER_REASONS.threefoldRepetition
-        }
-
-        else {
-            console.log('inside checkmate')
-            return GAME_OVER_REASONS.checkmate
-
-        }
-
-
-    }
-
 
 
     const getResult = (reason: string) => {
@@ -87,7 +61,8 @@ function GameEnd(props: GameEndProps,) {
 
 
 
-    const result = getGameEndResult(reason === "" ? getReason() : reason)
+    // const result = getGameEndResult(reason === "" ? getReason() : reason)
+    const result = getGameEndResult(reason)
 
 
     return (

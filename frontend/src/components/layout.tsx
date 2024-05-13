@@ -6,7 +6,7 @@ type LayoutProps = {
 function Layout(props: LayoutProps) {
     const { children } = props
     return (
-        <div className='container mx-auto md:grid md:grid-cols-6 mt-4'>
+        <div className='w-full max-w-[1100px] mx-auto md:grid md:grid-cols-6 mt-4 p-2'>
             {children}
         </div>
     )

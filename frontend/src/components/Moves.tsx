@@ -14,7 +14,7 @@ function Moves() {
                         <div className="px-4 py-1 text-white bg-blue-600 rounded-lg">{index + 1}.</div>
                         {pair.map((move, moveIndex) => (
                             <div key={moveIndex} className="px-6 py-1 bg-gray-200 rounded-lg mr-2">
-                                {move}
+                                {move.to}
                             </div>
                         ))}
                     </div>

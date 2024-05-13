@@ -62,6 +62,12 @@ export class GameManager {
             return
         }
 
+        if (game.wUserId === user.userId) {
+            console.log("same player trying to act black")
+            SocketManager.getStaticInstance().broadCast(game.id, JSON.stringify({ type: "game_alert", payload: { message: "waiting" } }))
+            return;
+        }
+
         game.bUserId = user.userId
         SocketManager.getStaticInstance().addUser(user, game.id)
         this.pendingGameId = null

@@ -5,6 +5,9 @@ import { useUserValue } from "../hooks/user";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/layout";
 import Board from "../chessboard/board";
+import { useSetChess } from "../hooks/chess";
+import { Chess } from "chess.js";
+import { useSetMoves } from "../hooks/moves";
 
 export const INIT_GAME = "init_game"
 
@@ -16,6 +19,8 @@ function Lobby() {
     const socketState = useSocketValue()
     const [gameState, setGameState] = useGame()
     const [showWaiting, setShowWaiting] = useState(false)
+    const setChess = useSetChess()
+    const setMoves = useSetMoves()
     const user = useUserValue()
     const navigate = useNavigate()
 
@@ -29,6 +34,12 @@ function Lobby() {
 
         socket.send(JSON.stringify({ type: INIT_GAME }))
     }
+
+    useEffect(() => {
+        console.log('setting chess')
+        setChess(new Chess())
+        setMoves([])
+    }, [])
 
 
     function handleLobbyMessages(message: Message) {
@@ -79,9 +90,10 @@ function Lobby() {
                 <div className="col-span-4">
                     <Board staticBoard={true} isMultiPlayer={false} isWhitePlayer={true} />
                 </div>
-                <div className="col-span-2">
-                    <p>{showWaiting && "waiting..."}</p>
-                    <div onClick={play}>Join a RandomGame</div>
+                <div className="col-span-2 flex justify-center items-start mt-3">
+                    {< button disabled={showWaiting} onClick={play} className={` ${user.loggedIn ? "bg-green-500 hover:bg-green-600" : "bg-green-200"}  text-white font-semibold py-2 px-4 rounded`} >
+                        {showWaiting ? "Waiting..." : "Play random"}
+                    </button>}
                 </div>
 
             </Layout>

@@ -14,12 +14,12 @@ const port = 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173'],
     credentials: true
 }));
 app.use(cookieParser());
 
-app.use("/", router)
+app.use("/api", router)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
     console.error(err.stack);
@@ -43,7 +43,7 @@ server.on('upgrade', function upgrade(req, socket, head) {
     socket.on('error', onSocketError);
 
     // for advance use case refer https://github.com/covalence-io/ws-auth/blob/main/sockets/index.ts
-    let path = "/socket"
+    let path = "/api/socket"
 
     if (!req.url) {
         socket.destroy()

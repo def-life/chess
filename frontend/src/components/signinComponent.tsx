@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import axiosInstance from "../utils/network";
 import { useSetAccessToken } from "../hooks/accessToken";
 import { useUser } from "../hooks/user";
+import Loader from "./Loader";
 
 function SignInComponent() {
     const [loading, setLoading] = useState(false)
@@ -30,6 +31,7 @@ function SignInComponent() {
     }
 
     useEffect(() => {
+        console.log("id client", import.meta.env)
 
         // TODO: solve ts-ignore issues
         // @ts-ignore
@@ -57,7 +59,7 @@ function SignInComponent() {
 
     return (
         <>
-            {loading ? !user.loggedIn && < div id="buttonDiv"></div > : "loading..."}
+            {!loading ? !user.loggedIn && < div id="buttonDiv"></div > : <Loader />}
 
         </>
     )

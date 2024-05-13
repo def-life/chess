@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsc -b && node dist/index.js"
+    "dev": "npx tsc -b && node dist/index.js",
+    "dev:generate": "npx prisma generate",
+    "dev:migrate": "npx prisma migrate deploy && npm run dev:generate"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,7 @@
     "google-auth-library": "^9.9.0",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^5.13.0",
+    "typescript": "^5.4.5",
     "uuid": "^9.0.1",
     "ws": "^8.17.0",
     "zod": "^3.23.6"

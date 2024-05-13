@@ -1,6 +1,13 @@
+import { Square } from "chess.js";
 import { atom } from "recoil";
 
-export type Moves = string[]
+type Move = {
+    from: Square,
+    to: Square,
+    promotion?: string
+}
+
+export type Moves = Move[]
 
 const moves = atom<Moves>({
     key: 'movesState ', // unique ID (with respect to other atoms/selectors)

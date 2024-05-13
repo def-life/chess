@@ -27,10 +27,21 @@ export const mapPosToKey = ({ pos: { x, y }, rect, isWhitePlayer }: { pos: { x: 
 
 }
 
+export const disableScroll = () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+    window.onscroll = function () {
+        window.scrollTo(scrollLeft, scrollTop);
+    };
+};
+
+export const enableScroll = () => {
+    window.onscroll = () => { };
+};
 // TODO: handle types here
 
 export const getEventPosition = (e: any) => {
-    console.log(e)
     if (e.clientX || e.clientX === 0) {
         return [e.clientX, e.clientY];
     }
