@@ -19,6 +19,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
+            
+            # Load bash profile to get nvm / node / npm
+            source ~/.bashrc
 
             cd /home/ubuntu/chess
 
