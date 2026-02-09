@@ -1,71 +1,91 @@
-import { useEffect, useState } from "react"
+import { useCallback, useState } from "react";
 import axiosInstance from "../utils/network";
 import { useSetAccessToken } from "../hooks/accessToken";
 import { useUser } from "../hooks/user";
 import Loader from "./Loader";
+import { GOOGLE_CLIENT_ID } from "../config";
 
-function SignInComponent() {
-    const [loading, setLoading] = useState(false)
-    const setAccessToken = useSetAccessToken()
-    const [user, setUser] = useUser()
+declare global {
+  interface Window {
+    google: typeof google;
+  }
 
-    async function handleCredentialResponse(response: { credential: string }) {
-        setLoading(true)
-
-        console.log("Encoded JWT ID token: " + response.credential);
-        try {
-
-            const res = await axiosInstance.post("v1/login", { googleJWT: response.credential })
-            // token
-            const { accessToken, userId } = res.data;
-            setAccessToken(accessToken);
-            setUser({ ...user, userId })
-            console.log(accessToken, userId, "imp")
-
-        } catch (er) {
-            console.log(er)
-        } finally {
-            setLoading(false)
-        }
-
-    }
-
-    useEffect(() => {
-        console.log("id client", import.meta.env)
-
-        // TODO: solve ts-ignore issues
-        // @ts-ignore
-
-        google.accounts.id.initialize({
-            client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-            callback: handleCredentialResponse
-        });
-
-        console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
-
-        // @ts-ignore
-        google.accounts.id.renderButton(
-            document.getElementById("buttonDiv"),
-            { theme: "outline", size: "medium", shape: "pill" }  // customization attributes
-        );
-
-        // // @ts-ignore
-        // google.accounts.id.prompt(); // also display the One Tap dialog
-
-
-    }, [])
-
-    // TODO: show a loader
-
-    return (
-        <>
-            {!loading ? !user.loggedIn && < div id="buttonDiv"></div > : <Loader />}
-
-        </>
-    )
+  const google: {
+    accounts: {
+      id: {
+        initialize: (config: {
+          client_id: string;
+          callback: (response: { credential: string }) => void;
+        }) => void;
+        renderButton: (
+          parent: HTMLElement,
+          options: {
+            theme?: "outline" | "filled_blue" | "filled_black";
+            size?: "small" | "medium" | "large";
+            shape?: "rectangular" | "pill" | "circle";
+          },
+        ) => void;
+        cancel: () => void;
+        prompt?: () => void;
+      };
+    };
+  };
 }
 
-export default SignInComponent
+function SignInComponent() {
+  const [loading, setLoading] = useState(false);
+  const setAccessToken = useSetAccessToken();
+  const [user, setUser] = useUser();
 
+  const handleCredentialResponse = useCallback(
+    async (response: { credential: string }) => {
+      setLoading(true);
 
-// show loader
+      try {
+        const res = await axiosInstance.post("v1/login", {
+          googleJWT: response.credential,
+        });
+        const { accessToken, userId } = res.data;
+        setAccessToken(accessToken);
+        setUser((prev) => ({ ...prev, userId, loggedIn: true }));
+      } catch (er) {
+        console.log(er);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setAccessToken, setUser],
+  );
+
+  const initializeGoogle = useCallback(
+    (node: HTMLDivElement | null) => {
+      console.log("testing", node);
+      if (node) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleCredentialResponse,
+        });
+        google.accounts.id.renderButton(node, {
+          theme: "outline",
+          size: "medium",
+          shape: "pill",
+        });
+      } else {
+        google.accounts.id.cancel();
+      }
+    },
+    [handleCredentialResponse],
+  );
+
+  return (
+    <>
+      {!loading ? (
+        !user.loggedIn && <div ref={initializeGoogle} id="buttonDiv"></div>
+      ) : (
+        <Loader />
+      )}
+    </>
+  );
+}
+
+export default SignInComponent;

@@ -22,7 +22,7 @@ function Home() {
                     Load a chessboard
                 </Link>
                 {< button onClick={handleClick} className={` ${user.loggedIn ? "bg-green-500 hover:bg-green-600" : "bg-green-200"}  text-white font-semibold py-2 px-4 rounded`} >
-                    Play random
+                    SignIn for Multiplayer
                 </button>}
             </div>
 

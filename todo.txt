@@ -1,0 +1,3 @@
+move all the effects out of the components.
+// resolve bugs where i am playing with myself
+// enchance the websocket for more features

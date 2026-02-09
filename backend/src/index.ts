@@ -9,7 +9,7 @@ import { GameManager } from "./socket/GameManager";
 import { Chess } from "chess.js";
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
