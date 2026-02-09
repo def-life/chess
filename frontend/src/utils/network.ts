@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseURL = "http://localhost:3001/api"
-export const websocketURL = "ws://localhost:3001/api/socket"
+const baseURL = import.meta.env.DEV ? "http://localhost:3001/api" : "http://54.172.178.12/api"
+export const websocketURL = import.meta.env.DEV ? "ws://localhost:3001/api/socket" : "ws://54.172.178.12/api/socket"
 
 const axiosInstance = axios.create({
     baseURL: baseURL, // Replace this with your base URL
