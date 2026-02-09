@@ -38,6 +38,11 @@ jobs:
             npm ci
             npm run build
 
+            echo "copy build to nginx directory..."
+            sudo mkdir -p /var/www/chess
+            sudo cp -r /home/ubuntu/chess/frontend/dist/* /var/www/chess/
+            sudo chown -R www-data:www-data /var/www/chess
+
             echo "Building backend..."
             cd ../backend
             npm ci
