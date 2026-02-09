@@ -19,9 +19,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
-            
-            # Load bash profile to get nvm / node / npm
-            source ~/.bashrc
+
+            # Load nvm and Node environment
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Optional: confirm Node/npm versions
+            node -v
+            npm -v
 
             cd /home/ubuntu/chess
 
