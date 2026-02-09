@@ -13,8 +13,9 @@ const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// TODO: refactor 
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', "http://chess.rezero.click", "http://54.172.178.12"],
     credentials: true
 }));
 app.use(cookieParser());
